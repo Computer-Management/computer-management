@@ -3,7 +3,6 @@ package com.project.login.token;
 import com.project.dto.AccountDto;
 import com.project.model.Account;
 import com.project.payload.ErrorDesc;
-import com.project.payload.ResultCode;
 import com.project.repository.AccountRepository;
 import com.project.utils.AdminUtils;
 import com.project.utils.StringUtils;
@@ -48,7 +47,7 @@ public class TokenImpl implements TokenService {
             accountRepo.persist(account);
             return adminUtils.modelMapper().map(account, AccountDto.class);
         } catch (Exception e) {
-            throw new WebApplicationException(Response.status(BAD_REQUEST).entity(ErrorDesc.ACCOUNT_ALREADY_EXISTED).build());
+            throw new WebApplicationException(Response.status(BAD_REQUEST).entity(ErrorDesc.BAD_FORMAT).build());
         }
     }
 
@@ -76,9 +75,6 @@ public class TokenImpl implements TokenService {
             return object;
         }
         Log.info("Login failed, Account is invalid username or password!!");
-        object = new JsonObject();
-        object.put("resultCode", ResultCode.FAIL);
-        object.put("message", "Account is invalid username or password!");
-        throw new WebApplicationException(Response.status(BAD_REQUEST).entity(object).build());
+        throw new WebApplicationException(Response.status(BAD_REQUEST).entity(ErrorDesc.BAD_FORMAT).build());
     }
 }
