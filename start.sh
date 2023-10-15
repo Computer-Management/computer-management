@@ -1,7 +1,4 @@
 ./generate_jwtKeys.sh
-cd service-main
-mvn clean compile package
-cd ../service-gateway
-mnv clean compile package
-cd ../
+mvn clean compile package -am -pl service-main
+mvn clean compile package -am -pl service-gateway
 docker compose up
