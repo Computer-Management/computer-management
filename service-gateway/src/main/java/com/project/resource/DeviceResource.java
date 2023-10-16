@@ -12,6 +12,7 @@ import jakarta.ws.rs.HttpMethod;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("/device")
 @Singleton
@@ -22,10 +23,10 @@ public class DeviceResource {
     CallHttpClient httpClient;
 
     @GET
-    @RolesAllowed({"admin"})
+    @RolesAllowed("admin")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public JsonObject hello() {
-        return httpClient.callHttpWithUrl("http://127.0.0.1:8080/hello", HttpMethod.GET, new JsonObject());
+    public Response hello() {
+        return Response.ok(httpClient.callHttpWithUrl("http://127.0.0.1:8080/hello", HttpMethod.GET, new JsonObject())).build();
     }
 }

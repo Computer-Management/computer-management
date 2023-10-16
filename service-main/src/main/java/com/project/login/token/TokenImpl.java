@@ -57,7 +57,6 @@ public class TokenImpl implements TokenService {
         jwt.issuer("jwt-token");
         jwt.subject("computer-management");
         jwt.expiresAt(System.currentTimeMillis() + 3600);
-        object.put("expiresAt", 3600);
         Account account = Account.findByUsername(username);
         if (account != null
                 && adminUtils.verifyPassword(password)
@@ -66,11 +65,11 @@ public class TokenImpl implements TokenService {
             if (account.isAdmin()) {
                 jwt.groups("admin");
                 object.put("userType", "admin");
-                object.put("token", jwt.sign());
-                return object;
+            } else {
+                jwt.groups("user");
+                object.put("userType", "user");
             }
-            jwt.groups("user");
-            object.put("userType", "user");
+            object.put("expiresAt", 3600);
             object.put("token", jwt.sign());
             return object;
         }
