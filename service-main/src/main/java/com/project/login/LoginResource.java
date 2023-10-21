@@ -3,6 +3,7 @@ package com.project.login;
 import com.project.dto.AccountDto;
 import com.project.login.token.TokenService;
 import io.vertx.core.json.JsonObject;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
@@ -22,13 +23,6 @@ import jakarta.ws.rs.core.Response;
 public class LoginResource {
     @Inject
     TokenService tokenService;
-
-    @POST
-    @Path("/register")
-    @Transactional
-    public Response registerAccount(AccountDto accountDto) {
-        return Response.ok(tokenService.register(accountDto)).build();
-    }
 
     @POST
     @Path("/login/token")
