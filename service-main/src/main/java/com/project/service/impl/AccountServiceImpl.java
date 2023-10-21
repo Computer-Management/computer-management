@@ -140,7 +140,6 @@ public class AccountServiceImpl implements AccountService {
             throw new WebApplicationException(Response.status(BAD_REQUEST)
                     .entity(adminUtils.statusResponse(BAD_REQUEST.getStatusCode(), ErrorDesc.BAD_FORMAT)).build());
         }
-        return null;
     }
 
     @Override
