@@ -29,7 +29,7 @@ public class TokenImpl implements TokenService {
         JsonObject object = new JsonObject();
         jwt.issuer("jwt-token");
         jwt.subject("computer-management");
-        jwt.expiresAt(System.currentTimeMillis() + 3600);
+        jwt.expiresAt(System.currentTimeMillis() + 300000);
         Account account = accountRepo.findByUsername(username);
 
         if (account != null && BcryptUtil.matches(password, account.getPassword())) {
@@ -41,7 +41,7 @@ public class TokenImpl implements TokenService {
                 jwt.groups("user");
                 object.put("userType", "user");
             }
-            object.put("expiresAt", 3600);
+            object.put("expiresAt", 300);
             object.put("token", jwt.sign());
             return object;
         }

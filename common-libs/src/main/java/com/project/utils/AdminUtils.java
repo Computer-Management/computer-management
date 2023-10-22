@@ -10,7 +10,9 @@ public class AdminUtils {
     private static final String MESSAGE_CODE = "messageCode";
 
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        return modelMapper;
     }
 
     public int getLimit(int limit) {

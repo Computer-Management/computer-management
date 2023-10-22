@@ -10,6 +10,7 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
@@ -49,6 +50,14 @@ public class AccountResource {
     @Transactional
     public Response registerAccount(AccountDto accountDto) {
         return Response.ok(accountService.addNewAccount(accountDto)).build();
+    }
+
+    @PUT
+    @RolesAllowed("admin")
+    @Path("/update-account/")
+    @Transactional
+    public Response updateAccount(AccountDto accountDto) {
+        return Response.ok(accountService.updateAccount(accountDto)).build();
     }
 
 

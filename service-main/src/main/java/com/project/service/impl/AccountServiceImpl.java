@@ -104,11 +104,13 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDto updateAccount(AccountDto accountDto) {
-        if (accountRepo.findByUsername(accountDto.getUsername()) != null) {
-            Log.errorf("Account %s already existed in system!!", accountDto.getUsername());
+        if (accountDto.getId() == null) {
+            Log.errorf("Account %s not existed in system!!", accountDto.getUsername());
             throw new WebApplicationException(Response.status(BAD_REQUEST)
-                    .entity(adminUtils.statusResponse(BAD_REQUEST.getStatusCode(), ErrorDesc.ACCOUNT_ALREADY_EXISTED)).build());
+                    .entity(adminUtils.statusResponse(BAD_REQUEST.getStatusCode(), ErrorDesc.ACCOUNT_NOT_EXISTED)).build());
         }
+        Account account = accountRepo.findById(accountDto.getId());
+        adminUtils.modelMapper().map(accountDto, account);
         if (accountDto.getEmail() != null
                 && accountRepo.findByEmail(accountDto.getEmail()) != null
                 && !StringUtils.isValidEmail(accountDto.getEmail())) {
@@ -116,7 +118,7 @@ public class AccountServiceImpl implements AccountService {
             throw new WebApplicationException(Response.status(BAD_REQUEST)
                     .entity(adminUtils.statusResponse(BAD_REQUEST.getStatusCode(), ErrorDesc.VALIDATE_EMAIL_MOBILE)).build());
         }
-        if (accountDto.getPhoneNumber() != null && !StringUtils.isValidEmail(accountDto.getPhoneNumber())) {
+        if (accountDto.getPhoneNumber() != null && !StringUtils.validatePhoneNumber(accountDto.getPhoneNumber())) {
             Log.errorf("PhoneNumber %s is invalid", accountDto.getPhoneNumber());
             throw new WebApplicationException(Response.status(BAD_REQUEST)
                     .entity(adminUtils.statusResponse(BAD_REQUEST.getStatusCode(), ErrorDesc.VALIDATE_EMAIL_MOBILE)).build());
@@ -127,12 +129,11 @@ public class AccountServiceImpl implements AccountService {
                     .entity(adminUtils.statusResponse(BAD_REQUEST.getStatusCode(), ErrorDesc.VALIDATE_PERSON_ID)).build());
         }
         if (accountDto.getPassword() != null) {
-            accountDto.setPassword(BcryptUtil.bcryptHash(accountDto.getPassword()));
+            account.setPassword(BcryptUtil.bcryptHash(accountDto.getPassword()));
         }
-        accountDto.setUpdateAt(LocalDateTime.now());
-        Account account = adminUtils.modelMapper().map(accountDto, Account.class);
+        account.setUpdateAt(LocalDateTime.now());
         try {
-            accountRepo.persist(account);
+            accountRepo.persist(accountRepo.getEntityManager().merge(account));
             Log.infof("Update account %s success!!", account.getUsername());
             return adminUtils.modelMapper().map(account, AccountDto.class);
         } catch (Exception e) {

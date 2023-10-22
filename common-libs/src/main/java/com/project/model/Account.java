@@ -28,19 +28,19 @@ import lombok.Setter;
 public class Account extends StandardEntity {
     @Column(name = "fullName")
     private String fullName;
-    @Column(name = "username", unique = true)
+    @Column(name = "username")
     private String username;
     @Column(name = "password")
     private String password;
-    @Column(name = "identityNumber", unique = true)
+    @Column(name = "identityNumber")
     private String identityNumber;
     @Column(name = "dateOfBirth")
     private String dateOfBirth;
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
     @Column(name = "gender")
     private boolean gender;
-    @Column(name = "phoneNumber", unique = true)
+    @Column(name = "phoneNumber")
     private String phoneNumber;
     @Column(name = "isAdmin")
     private boolean isAdmin;
