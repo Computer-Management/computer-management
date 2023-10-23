@@ -9,14 +9,14 @@ import io.quarkus.logging.Log;
 import io.smallrye.jwt.build.Jwt;
 import io.smallrye.jwt.build.JwtClaimsBuilder;
 import io.vertx.core.json.JsonObject;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 
 import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
 
-@ApplicationScoped
+@RequestScoped
 public class TokenImpl implements TokenService {
     @Inject
     AdminUtils adminUtils;
@@ -29,6 +29,7 @@ public class TokenImpl implements TokenService {
         JsonObject object = new JsonObject();
         jwt.issuer("jwt-token");
         jwt.subject("computer-management");
+        jwt.issuedAt(System.currentTimeMillis() + 300000);
         jwt.expiresAt(System.currentTimeMillis() + 300000);
         Account account = accountRepo.findByUsername(username);
 
