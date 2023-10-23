@@ -23,7 +23,7 @@ public class AdminUtils {
         return data;
     }
 
-    public boolean verifyPassword(String password) {
+    public boolean verifyMD5(String password) {
         return password.matches("^[a-fA-F0-9]{32}$");
     }
 
