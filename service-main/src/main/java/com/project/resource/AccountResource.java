@@ -2,6 +2,7 @@ package com.project.resource;
 
 import com.project.dto.AccountDto;
 import com.project.service.AccountService;
+import com.project.utils.AdminUtils;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -22,6 +23,8 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 @Singleton
 public class AccountResource {
+    @Inject
+    AdminUtils adminUtils;
     @Inject
     AccountService accountService;
 
